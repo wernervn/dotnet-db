@@ -1,0 +1,53 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <LangVersion>latest</LangVersion>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net6.0</TargetFramework>
+        <IsPackable>true</IsPackable>
+        <PackAsTool>true</PackAsTool>
+        <ToolCommandName>sqlx</ToolCommandName>
+        <!--<AssemblyName>dotnet-sqlx</AssemblyName>-->
+        <PackageId>dotnet-sqlx</PackageId>
+        <Authors>Werner van Niekerk</Authors>
+        <Company>Werner van Niekerk</Company>
+        <Owner>Werner van Niekerk</Owner>
+        <Product>sqlx</Product>
+        <Description>Runs SQL scripts from the command-line</Description>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <NeutralLanguage>en-US</NeutralLanguage>
+        <PackageReleaseNotes>See https://github.com/wernervn/dotnet-db/blob/master/CHANGELOG.md#v100 for release notes.</PackageReleaseNotes>
+
+        <DisableMSBuildAssemblyCopyCheck>true</DisableMSBuildAssemblyCopyCheck>
+        <PackageOutputPath>../nupkg</PackageOutputPath>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Dapper" Version="2.0.78" />
+        <PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="3.1.0" />
+        <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
+        <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
+        <PackageReference Include="System.IO.Abstractions" Version="13.2.25" />
+    </ItemGroup>
+
+    <Target Name="UninstallTool" AfterTargets="Clean">
+        <Message Text="Package Uninstalling... $(PackageOutputPath)" />
+      <Exec Command="dotnet tool uninstall --global $(PackageId)" IgnoreExitCode="true" />
+    </Target>
+
+    <Target Name="ReinstallTool" AfterTargets="Pack">
+        <!--<Message Text="Package Output Path = $(PackageOutputPath)" />
+    <Message Text="Tool Command Name = $(ToolCommandName)" />
+    <Message Text="Assembly Name = $(AssemblyName)" />-->
+
+        <!--<Message Text="Package Uninstalling... $(PackageOutputPath)" />
+        <Exec Command="dotnet tool uninstall ++global $(ToolCommandName)" IgnoreExitCode="true" />
+        <Exec Command="dotnet tool install ++global ++add-source $(PackageOutputPath) $(ToolCommandName)" />
+        <Exec Command="$(ToolCommandName) ++help" />-->
+      <Message Text="Package Installing... $(PackageOutputPath)" />
+      <Message Text="Package Installing... $(PackageId)" />
+      <Exec Command="dotnet tool update -g --add-source $(PackageOutputPath) $(PackageId)" />
+    </Target>
+
+</Project>
